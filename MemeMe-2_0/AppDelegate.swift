@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreImage
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,8 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Central array to keep generated Memes
     var memesArray = [MemeImage]()
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    {
+        print( "AppDelegate::application()" )
         // Override point for customization after application launch.
+        
+        // Load the memes table up with one sample Meme just for now
+        let memedImage = UIImage( named: "Goldfinger" )
+        
+        let firstMeme = MemeImage( topText: "No Mr Bond", bottomText: "I expect you to post a Meme!", origImage: memedImage!, memedImage: memedImage!  )
+        memesArray.append( firstMeme )
+        
         return true
     }
 
@@ -42,9 +52,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        self.saveContext()
+        //self.saveContext()
     }
 
+    /*
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {
@@ -54,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
         */
-        let container = NSPersistentContainer(name: "MemeMe_1_0")
+        let container = NSPersistentContainer(name: "MemeMe_2_0")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -89,6 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+ */
 
 }
 

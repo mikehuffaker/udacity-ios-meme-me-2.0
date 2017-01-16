@@ -272,7 +272,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         
         self.theMeme = MemeImage.init( topText: self.txtTop.text!, bottomText: self.txtBottom.text!, origImage: self.imgView.image!, memedImage: memedImage )
         
-        (UIApplication.sharedApplication().delegate as! AppDelegate).memesArray.append( self.theMeme )
+        (UIApplication.shared.delegate as! AppDelegate).memesArray.append( self.theMeme )
     }
 }
 
