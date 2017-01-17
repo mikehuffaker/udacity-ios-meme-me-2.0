@@ -211,6 +211,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         // and via ARC functionallity, memory will be freed up automatically, similar to Java
         // garbage collection.
         theMeme = nil
+        
+        // Pop back to Collection OR Table View
+        if let navigationController = navigationController
+        {
+            navigationController.popToRootViewController(animated: true )
+        }
     }
     
     // Meme sharing/processing code
@@ -242,6 +248,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         }
         
         self.present( socialController, animated: true, completion: nil )
+        
+        // Pop back to Collection OR Table View
+        if let navigationController = navigationController
+        {
+            navigationController.popToRootViewController( animated: true )
+        }
     }
     
     // generate a new Memed image

@@ -11,6 +11,8 @@ import UIKit
 
 class MemeCollectionViewController: UICollectionViewController
 {
+    @IBOutlet weak var MemeCollectionFlowLayout: UICollectionViewFlowLayout!
+    
     
     // MARK: Properties
     
@@ -25,9 +27,21 @@ class MemeCollectionViewController: UICollectionViewController
         print( "MemeCollectionViewController::viewDidLoad()" )
         
         super.viewDidLoad()
+        
+        // Get reference to Memes Array
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
-        //TODO: Implement flowLayout here.
+        
+        // Insert right "Add" button to navigation bar for editing Memes
+        navigationItem.rightBarButtonItem = UIBarButtonItem( barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(addButtonPushed) )
+        
+        // Setup Collection View flow layout
+        let spacing = CGFloat( 3.0 )
+        let dimension = ( view.frame.size.width - ( 2 * spacing ) ) / 3.0
+        
+        MemeCollectionFlowLayout.minimumInteritemSpacing = spacing
+        MemeCollectionFlowLayout.minimumLineSpacing = spacing
+        MemeCollectionFlowLayout.itemSize = CGSize( width: dimension, height: dimension )
     }
     
     override func viewWillAppear(_ animated: Bool)
@@ -64,5 +78,16 @@ class MemeCollectionViewController: UICollectionViewController
         //let detailController = self.storyboard!.instantiateViewController(withIdentifier: "VillainDetailViewController") as! VillainDetailViewController
         //detailController.villain = self.allVillains[(indexPath as NSIndexPath).row]
         //self.navigationController!.pushViewController(detailController, animated: true)
+    }
+    
+    func addButtonPushed()
+    {
+        if let navigationController = navigationController
+        {
+            // Get a StoryNodeController from the Storyboard
+            let memeEditorVC = self.storyboard!.instantiateViewController(withIdentifier: "MemeEditorVC")as! MemeEditorViewController
+
+            navigationController.pushViewController( memeEditorVC, animated: true )
+        }
     }
 }
