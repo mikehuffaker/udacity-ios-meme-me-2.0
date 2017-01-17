@@ -45,6 +45,18 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         
         super.viewDidLoad()
         
+        if let tabBarController = tabBarController
+        {
+            tabBarController.tabBar.isHidden = true
+        }
+        
+        // Hide the navigation controller bars for this screen
+        if let navigationController = navigationController
+        {
+            navigationController.isToolbarHidden = true
+            navigationController.isNavigationBarHidden = true
+        }
+        
         // initially disable top toolbar share button, until the user picks an image for a meme
         btnSocial.isEnabled = false
 
@@ -212,9 +224,17 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         // garbage collection.
         theMeme = nil
         
+        if let tabBarController = tabBarController
+        {
+            tabBarController.tabBar.isHidden = false
+        }
+        
         // Pop back to Collection OR Table View
         if let navigationController = navigationController
         {
+            // Un-Hide the navigation controller bars for this screen, and "pop" back
+            navigationController.isToolbarHidden = false
+            navigationController.isNavigationBarHidden = false
             navigationController.popToRootViewController(animated: true )
         }
     }

@@ -13,15 +13,8 @@ class MemeCollectionViewController: UICollectionViewController
 {
     @IBOutlet weak var MemeCollectionFlowLayout: UICollectionViewFlowLayout!
     
-    
-    // MARK: Properties
-    
-    // TODO: Add outlet to flowLayout here.
-    
     var memes: [MemeImage] = []
-    
-    // MARK: Life Cycle
-    
+
     override func viewDidLoad()
     {
         print( "MemeCollectionViewController::viewDidLoad()" )
@@ -31,9 +24,6 @@ class MemeCollectionViewController: UICollectionViewController
         // Get reference to Memes Array
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
-        
-        // Insert right "Add" button to navigation bar for editing Memes
-        navigationItem.rightBarButtonItem = UIBarButtonItem( barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: #selector(addButtonPushed) )
         
         // Setup Collection View flow layout
         let spacing = CGFloat( 3.0 )
@@ -63,7 +53,7 @@ class MemeCollectionViewController: UICollectionViewController
     {
         print( "MemeCollectionViewController::cellForItemAt()" )
        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionViewCell", for: indexPath) as! MemeCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionCell", for: indexPath) as! MemeCollectionCell
         
         let theMeme = self.memes[(indexPath as NSIndexPath).row]
         cell.imgMeme?.image = theMeme.memedImage
@@ -80,14 +70,4 @@ class MemeCollectionViewController: UICollectionViewController
         //self.navigationController!.pushViewController(detailController, animated: true)
     }
     
-    func addButtonPushed()
-    {
-        if let navigationController = navigationController
-        {
-            // Get a StoryNodeController from the Storyboard
-            let memeEditorVC = self.storyboard!.instantiateViewController(withIdentifier: "MemeEditorVC")as! MemeEditorViewController
-
-            navigationController.pushViewController( memeEditorVC, animated: true )
-        }
-    }
 }
