@@ -6,7 +6,6 @@
 //  Copyright © 2017 Mike Huffaker. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class MemeCollectionViewController: UICollectionViewController
@@ -68,6 +67,12 @@ class MemeCollectionViewController: UICollectionViewController
         //let detailController = self.storyboard!.instantiateViewController(withIdentifier: "VillainDetailViewController") as! VillainDetailViewController
         //detailController.villain = self.allVillains[(indexPath as NSIndexPath).row]
         //self.navigationController!.pushViewController(detailController, animated: true)
+    }
+    
+    @IBAction func addButtonPressed(_ sender: Any)
+    {
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeEditorVC") as! MemeEditorViewController
+        self.navigationController!.pushViewController(controller, animated: true)
     }
     
 }

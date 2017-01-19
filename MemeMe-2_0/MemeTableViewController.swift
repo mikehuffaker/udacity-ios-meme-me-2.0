@@ -15,6 +15,7 @@ class MemeTableViewController: UITableViewController
     override func viewDidLoad()
     {
         print( "MemeTableViewController::viewDidLoad()")
+        
         super.viewDidLoad()
         
         // Per a tutorial on this web page: https://www.raywenderlich.com/129059/self-sizing-table-view-cells
@@ -27,6 +28,15 @@ class MemeTableViewController: UITableViewController
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
     }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+        
+        self.tableView.reloadData()
+    }
+
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
@@ -54,5 +64,12 @@ class MemeTableViewController: UITableViewController
         
         return cell
     }
+    
+    @IBAction func addButtonPressed(_ sender: Any)
+    {
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeEditorVC") as! MemeEditorViewController
+        self.navigationController!.pushViewController(controller, animated: true)
+    }
+    
 }
 

@@ -233,7 +233,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         if let navigationController = navigationController
         {
             // Un-Hide the navigation controller bars for this screen, and "pop" back
-            navigationController.isToolbarHidden = false
+            //navigationController.isToolbarHidden = false
             navigationController.isNavigationBarHidden = false
             navigationController.popToRootViewController(animated: true )
         }
@@ -272,6 +272,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         // Pop back to Collection OR Table View
         if let navigationController = navigationController
         {
+            navigationController.isNavigationBarHidden = false
             navigationController.popToRootViewController( animated: true )
         }
     }
