@@ -26,12 +26,16 @@ class MemeCollectionViewController: UICollectionViewController
         memes = appDelegate.memesArray
         
         // Setup Collection View flow layout
-        let spacing = CGFloat( 3.0 )
+        let spacing = CGFloat( 4.0 )
         let dimension = ( view.frame.size.width - ( 2 * spacing ) ) / 3.0
+        print( "Dimension for collection: ", dimension )
+        
+        let iDimension = Int(dimension)
+        print( "Dimension for collection rounded: ", iDimension )
         
         MemeCollectionFlowLayout.minimumInteritemSpacing = spacing
         MemeCollectionFlowLayout.minimumLineSpacing = spacing
-        MemeCollectionFlowLayout.itemSize = CGSize( width: dimension, height: dimension )
+        MemeCollectionFlowLayout.itemSize = CGSize( width: iDimension, height: iDimension )
     }
     
     override func viewWillAppear(_ animated: Bool)

@@ -17,14 +17,9 @@ class BottomTxtDelegate : NSObject, UITextFieldDelegate
         
         // Only if the text field has is initial value, then null
         // out when the user starts editing
-        print( "Before If")
         if textField.text == "BOTTOM"
         {
-            print( "Inside If")
-            
             textField.text = ""
-            print( "Text Field cleared")
-            
         }
         
         print( "Exiting textFieldDidBeginEditing")
