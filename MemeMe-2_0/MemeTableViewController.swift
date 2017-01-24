@@ -22,13 +22,6 @@ class MemeTableViewController: UITableViewController
         
         super.viewDidLoad()
         
-        // Per a tutorial on this web page: https://www.raywenderlich.com/129059/self-sizing-table-view-cells
-        // this is supposed to help tell Auto Layout to resize the table cells as needed.  It does in fact work.
-        // If I comment this code out, the lblDtl field will not resize to hold 2 lines of text when I test the
-        // app on a smaller screen, such as the iPhone 5 screen.
-        //memeTable.rowHeight = UITableViewAutomaticDimension
-        //memeTable.estimatedRowHeight = 140
-        
         appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
     }
@@ -40,8 +33,9 @@ class MemeTableViewController: UITableViewController
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
         
-        // Noticed sometimes when exiting the Meme Edit view, the table doesn't get updated and seems to still point
-        // to a "Copy" of the original array from the AppDelegate, NOT a reference.
+        // Noticed sometimes when exiting the Meme Edit view, even though the MEME was saved to the app delegate,
+        // the collection didn't load the new image and refresh, so this is a fix for that
+        
         print( "Refreshing Table" )
         memes = appDelegate.memesArray
         self.tableView.reloadData()

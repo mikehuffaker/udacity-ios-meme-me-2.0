@@ -10,6 +10,7 @@ import UIKit
 
 class MemeCollectionViewController: UICollectionViewController
 {
+    
     @IBOutlet weak var MemeCollectionFlowLayout: UICollectionViewFlowLayout!
     
     var memes: [MemeImage]!
@@ -39,6 +40,15 @@ class MemeCollectionViewController: UICollectionViewController
         
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        
+        // Noticed sometimes when exiting the Meme Edit view, even though the MEME was saved to the app delegate,
+        // the collection didn't load the new image and refresh, so this is a fix for that
+        
+        // Get reference to Memes Array
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        memes = appDelegate.memesArray
+        
+        self.collectionView?.reloadData()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
