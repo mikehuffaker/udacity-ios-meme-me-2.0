@@ -10,7 +10,11 @@ import UIKit
 
 class MemeTableViewController: UITableViewController
 {
-    var memes: [MemeImage] = []
+    
+    @IBOutlet var memeTable: UITableView!
+    
+    var appDelegate: AppDelegate!
+    var memes: [MemeImage]!
     
     override func viewDidLoad()
     {
@@ -22,25 +26,31 @@ class MemeTableViewController: UITableViewController
         // this is supposed to help tell Auto Layout to resize the table cells as needed.  It does in fact work.
         // If I comment this code out, the lblDtl field will not resize to hold 2 lines of text when I test the
         // app on a smaller screen, such as the iPhone 5 screen.
-        //historyTable.rowHeight = UITableViewAutomaticDimension
-        //historyTable.estimatedRowHeight = 100
+        //memeTable.rowHeight = UITableViewAutomaticDimension
+        //memeTable.estimatedRowHeight = 140
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
     }
     
     override func viewWillAppear(_ animated: Bool)
     {
+        print( "MemeTableViewController::viewWillAppear()")
+        
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
         
+        // Noticed sometimes when exiting the Meme Edit view, the table doesn't get updated and seems to still point
+        // to a "Copy" of the original array from the AppDelegate, NOT a reference.
+        print( "Refreshing Table" )
+        memes = appDelegate.memesArray
         self.tableView.reloadData()
     }
 
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         print( "MemeTableViewController::tableView::numberOfRowsInSection" )
+        print( "Rows are: ", memes.count )
         
         return memes.count
     }
@@ -49,20 +59,25 @@ class MemeTableViewController: UITableViewController
     {
         print( "MemeTableViewController::tableView::cellForRowAt" )
         
-        let cellID = "MemeTableCell"
-        
-        let cell:MemeTableCell = tableView.dequeueReusableCell( withIdentifier: cellID, for: indexPath ) as! MemeTableCell
+        let cell:MemeTableCell = tableView.dequeueReusableCell( withIdentifier: "MemeTableCell", for: indexPath ) as! MemeTableCell
         
         let theMeme = self.memes[(indexPath as NSIndexPath).row]
         
-        // Set table view cell values after parsing out from match class object
-        //let img = UIImage( named: match.imageName )
         cell.imgMeme!.image = theMeme.memedImage
         
         cell.lblTop.text = theMeme.topText
         cell.lblBottom.text = theMeme.bottomText
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath )
+    {
+        print( "MemeTableViewController::didSelectItemAt()" )
+        
+        let detailController = self.storyboard!.instantiateViewController( withIdentifier: "MemeDetailVC" ) as! MemeDetailViewController
+        detailController.theMeme = self.memes[(indexPath as NSIndexPath).row]
+        self.navigationController!.pushViewController( detailController, animated: true )
     }
     
     @IBAction func addButtonPressed(_ sender: Any)

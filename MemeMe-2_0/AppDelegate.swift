@@ -23,10 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         // Load the memes table up with one sample Meme just for now
-        let memedImage = UIImage( named: "Goldfinger" )
+        //let memedImage = UIImage( named: "Goldfinger" )
         
-        let firstMeme = MemeImage( topText: "No Mr Bond", bottomText: "I expect you to post a Meme!", origImage: memedImage!, memedImage: memedImage!  )
-        memesArray.append( firstMeme )
+        //let firstMeme = MemeImage( topText: "No Mr Bond", bottomText: "I expect you to post a Meme!", origImage: memedImage!, memedImage: memedImage!  )
+        //memesArray.append( firstMeme )
         
         return true
     }

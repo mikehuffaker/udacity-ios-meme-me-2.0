@@ -12,7 +12,7 @@ class MemeCollectionViewController: UICollectionViewController
 {
     @IBOutlet weak var MemeCollectionFlowLayout: UICollectionViewFlowLayout!
     
-    var memes: [MemeImage] = []
+    var memes: [MemeImage]!
 
     override func viewDidLoad()
     {
@@ -35,17 +35,18 @@ class MemeCollectionViewController: UICollectionViewController
     
     override func viewWillAppear(_ animated: Bool)
     {
+        print( "MemeCollectionViewController::viewWillAppear()" )
+        
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    // MARK: Collection View Data Source
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
         print( "MemeCollectionViewController::numberOfItemsInSection()" )
-
-        return self.memes.count
+        print( "Rows are: ", memes.count )
+        
+        return memes.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
@@ -64,9 +65,9 @@ class MemeCollectionViewController: UICollectionViewController
     {
         print( "MemeCollectionViewController::didSelectItemAt()" )
         
-        //let detailController = self.storyboard!.instantiateViewController(withIdentifier: "VillainDetailViewController") as! VillainDetailViewController
-        //detailController.villain = self.allVillains[(indexPath as NSIndexPath).row]
-        //self.navigationController!.pushViewController(detailController, animated: true)
+        let detailController = self.storyboard!.instantiateViewController( withIdentifier: "MemeDetailVC" ) as! MemeDetailViewController
+        detailController.theMeme = self.memes[(indexPath as NSIndexPath).row]
+        self.navigationController!.pushViewController( detailController, animated: true )
     }
     
     @IBAction func addButtonPressed(_ sender: Any)
@@ -74,5 +75,4 @@ class MemeCollectionViewController: UICollectionViewController
         let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeEditorVC") as! MemeEditorViewController
         self.navigationController!.pushViewController(controller, animated: true)
     }
-    
 }

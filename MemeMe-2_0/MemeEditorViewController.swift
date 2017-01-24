@@ -264,17 +264,23 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
                 print ( "User cancelled or other error" )
             }
             
-            self.dismiss( animated: true, completion: nil )
+            //self.dismiss( animated: true, completion: nil )
+            if let navigationController = self.navigationController
+            {
+                print ( "Returning to previous view via navigation" )
+                navigationController.isNavigationBarHidden = false
+                navigationController.popToRootViewController( animated: true )
+            }
         }
         
         self.present( socialController, animated: true, completion: nil )
         
         // Pop back to Collection OR Table View
-        if let navigationController = navigationController
-        {
-            navigationController.isNavigationBarHidden = false
-            navigationController.popToRootViewController( animated: true )
-        }
+        //if let navigationController = navigationController
+        //{
+        //    navigationController.isNavigationBarHidden = false
+        //    navigationController.popToRootViewController( animated: true )
+        //}
     }
     
     // generate a new Memed image
@@ -305,7 +311,8 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         
         self.theMeme = MemeImage.init( topText: self.txtTop.text!, bottomText: self.txtBottom.text!, origImage: self.imgView.image!, memedImage: memedImage )
         
-        (UIApplication.shared.delegate as! AppDelegate).memesArray.append( self.theMeme )
+        print( "Adding Meme to appDelegate memesArray" )
+        ( UIApplication.shared.delegate as! AppDelegate ).memesArray.append( self.theMeme )
     }
 }
 
