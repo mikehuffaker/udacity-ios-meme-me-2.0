@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  MemeMe-1_0
+//  MemeMe-2_0
 //
 //  Created by Mike Huffaker on 11/30/16.
 //  Copyright © 2016 Mike Huffaker. All rights reserved.
@@ -207,6 +207,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         pickerController.sourceType = sourceType
         
         self.present( pickerController, animated: true, completion: nil )
+    }
+    
+    // Meme Font selection section
+    @IBAction func selectFont(_ sender: Any)
+    {
+        print( "MemeEditorViewController::selectFont" )
     }
     
     // User pressed cancel, reset application

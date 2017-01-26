@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  MemeMe-1_0
+//  MemeMe-2_0
 //
 //  Created by Mike Huffaker on 11/30/16.
 //  Copyright © 2016 Mike Huffaker. All rights reserved.
@@ -21,12 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     {
         print( "AppDelegate::application()" )
         // Override point for customization after application launch.
-        
-        // Load the memes table up with one sample Meme just for now
-        //let memedImage = UIImage( named: "Goldfinger" )
-        
-        //let firstMeme = MemeImage( topText: "No Mr Bond", bottomText: "I expect you to post a Meme!", origImage: memedImage!, memedImage: memedImage!  )
-        //memesArray.append( firstMeme )
         
         return true
     }
