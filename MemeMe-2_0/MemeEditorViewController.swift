@@ -25,7 +25,10 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet weak var tbImage: UIToolbar!
     @IBOutlet weak var btnCamera: UIBarButtonItem!
     @IBOutlet weak var btnAlbum: UIBarButtonItem!
+    
+    var memeTxtAttributes:[String:Any] = [:]
 
+    /*
     let memeTxtAttributes:[String:Any] =
     [
         NSStrokeColorAttributeName: UIColor.black,
@@ -33,6 +36,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         NSFontAttributeName: UIFont( name: "HelveticaNeue-CondensedBlack", size: 40 )!,
         NSStrokeWidthAttributeName: NSNumber( value: -5.0 )
     ]
+ */
     
     let topTxtDelegate = TopTxtDelegate()
     let bottomTxtDelegate = BottomTxtDelegate()
@@ -60,6 +64,15 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         // initially disable top toolbar share button, until the user picks an image for a meme
         btnSocial.isEnabled = false
 
+        // Initial value for text attibutes, can be changed from the Font Selector View
+        memeTxtAttributes =
+        [
+                NSStrokeColorAttributeName: UIColor.black,
+                NSForegroundColorAttributeName: UIColor.white,
+                NSFontAttributeName: UIFont( name: "HelveticaNeue-CondensedBlack", size: 40 )!,
+                NSStrokeWidthAttributeName: NSNumber( value: -5.0 )
+        ]
+        
         // Setup top meme text field
         initializeTextFields( textField: txtTop, initialText: "TOP", delegate: topTxtDelegate )
         
@@ -213,6 +226,12 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBAction func selectFont(_ sender: Any)
     {
         print( "MemeEditorViewController::selectFont" )
+        
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeFontSelectorVC") as! MemeFontSelectorViewController
+        
+        controller.memeTxtAttributes = memeTxtAttributes
+            
+        self.navigationController!.pushViewController(controller, animated: true)
     }
     
     // User pressed cancel, reset application
