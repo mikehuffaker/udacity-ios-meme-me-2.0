@@ -43,7 +43,7 @@ class MemeCollectionViewController: UICollectionViewController
         print( "MemeCollectionViewController::viewWillAppear()" )
         
         super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
         
         // Noticed sometimes when exiting the Meme Edit view, even though the MEME was saved to the app delegate,
         // the collection didn't load the new image and refresh, so this is a fix for that
@@ -52,7 +52,7 @@ class MemeCollectionViewController: UICollectionViewController
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
         
-        self.collectionView?.reloadData()
+        collectionView?.reloadData()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
@@ -69,24 +69,33 @@ class MemeCollectionViewController: UICollectionViewController
        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MemeCollectionCell", for: indexPath) as! MemeCollectionCell
         
-        let theMeme = self.memes[(indexPath as NSIndexPath).row]
+        let theMeme = memes[(indexPath as NSIndexPath).row]
         cell.imgMeme?.image = theMeme.memedImage
         
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath:IndexPath)
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
         print( "MemeCollectionViewController::didSelectItemAt()" )
         
-        let detailController = self.storyboard!.instantiateViewController( withIdentifier: "MemeDetailVC" ) as! MemeDetailViewController
-        detailController.theMeme = self.memes[(indexPath as NSIndexPath).row]
-        self.navigationController!.pushViewController( detailController, animated: true )
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeDetailVC" ) as! MemeDetailViewController
+        
+        controller.theMeme = memes[(indexPath as NSIndexPath).row]
+        
+        if let navigationController = navigationController
+        {
+            navigationController.pushViewController( controller, animated: true )
+        }
     }
-    
+
     @IBAction func addButtonPressed(_ sender: Any)
     {
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeEditorVC") as! MemeEditorViewController
-        self.navigationController!.pushViewController(controller, animated: true)
+        let controller = self.storyboard!.instantiateViewController( withIdentifier: "MemeEditorVC" ) as! MemeEditorViewController
+        
+        if let navigationController = navigationController
+        {
+            navigationController.pushViewController( controller, animated: true ) 
+        }
     }
 }

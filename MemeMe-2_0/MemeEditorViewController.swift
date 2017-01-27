@@ -28,16 +28,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     var memeTxtAttributes:[String:Any] = [:]
 
-    /*
-    let memeTxtAttributes:[String:Any] =
-    [
-        NSStrokeColorAttributeName: UIColor.black,
-        NSForegroundColorAttributeName: UIColor.white,
-        NSFontAttributeName: UIFont( name: "HelveticaNeue-CondensedBlack", size: 40 )!,
-        NSStrokeWidthAttributeName: NSNumber( value: -5.0 )
-    ]
- */
-    
     let topTxtDelegate = TopTxtDelegate()
     let bottomTxtDelegate = BottomTxtDelegate()
     
@@ -74,10 +64,10 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         ]
         
         // Setup top meme text field
-        initializeTextFields( textField: txtTop, initialText: "TOP", delegate: topTxtDelegate )
+        initializeTextField( textField: txtTop, initialText: "TOP", delegate: topTxtDelegate )
         
         // Setup bottom meme text field
-        initializeTextFields( textField: txtBottom, initialText: "BOTTOM", delegate: bottomTxtDelegate )
+        initializeTextField( textField: txtBottom, initialText: "BOTTOM", delegate: bottomTxtDelegate )
         
         // Setting Aspect Fit so image expands and fits the screen
         imgView.contentMode = UIViewContentMode.scaleAspectFit
@@ -96,7 +86,11 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         print( "MemeEditorViewController::viewWillAppear()" )
         
         super.viewWillAppear( animated )
-        self.subscribeToKeyboardNotifications()        
+        subscribeToKeyboardNotifications()
+        
+        // Reset fonts
+        refreshTextFieldFont( textField: txtTop )
+        refreshTextFieldFont( textField: txtBottom )
     }
     
     override func viewWillDisappear(_ animated: Bool)
@@ -110,7 +104,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     // Initialization code
 
     // Method to init text fields
-    func initializeTextFields ( textField: UITextField, initialText: String, delegate: UITextFieldDelegate )
+    func initializeTextField ( textField: UITextField, initialText: String, delegate: UITextFieldDelegate )
     {
         print( "MemeEditorViewController::initializeTextFields()" )
         
@@ -120,10 +114,19 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         textField.delegate = delegate
     }
     
+    // Method to refresh the font text fields
+    func refreshTextFieldFont ( textField: UITextField )
+    {
+        print( "MemeEditorViewController::refreshTextFieldFont" )
+        
+        textField.defaultTextAttributes = memeTxtAttributes
+        textField.textAlignment = NSTextAlignment.center
+    }
+    
     // Keyboard shifting code
     func subscribeToKeyboardNotifications()
     {
-    print( "MemeEditorViewController::subscribeToKeyboardNotifications()" )
+        print( "MemeEditorViewController::subscribeToKeyboardNotifications()" )
 
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil )
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide(_:)), name: .UIKeyboardWillHide, object: nil )
@@ -219,19 +222,19 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         pickerController.delegate = self
         pickerController.sourceType = sourceType
         
-        self.present( pickerController, animated: true, completion: nil )
+        present( pickerController, animated: true, completion: nil )
     }
     
-    // Meme Font selection section
+    // Font button pressed, open Meme Font selection view
     @IBAction func selectFont(_ sender: Any)
     {
         print( "MemeEditorViewController::selectFont" )
         
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeFontSelectorVC") as! MemeFontSelectorViewController
+        let controller = storyboard!.instantiateViewController(withIdentifier: "MemeFontSelectorVC") as! MemeFontSelectorViewController
         
         controller.memeTxtAttributes = memeTxtAttributes
             
-        self.navigationController!.pushViewController(controller, animated: true)
+        navigationController!.pushViewController(controller, animated: true)
     }
     
     // User pressed cancel, reset application
@@ -258,7 +261,6 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         if let navigationController = navigationController
         {
             // Un-Hide the navigation controller bars for this screen, and "pop" back
-            //navigationController.isToolbarHidden = false
             navigationController.isNavigationBarHidden = false
             navigationController.popToRootViewController(animated: true )
         }
@@ -289,7 +291,8 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
                 print ( "User cancelled or other error" )
             }
             
-            //self.dismiss( animated: true, completion: nil )
+            // Once user shares or cancels, then return back to previous view - Table or Collection
+            // and restore the navigation bar to the screen
             if let navigationController = self.navigationController
             {
                 print ( "Returning to previous view via navigation" )
@@ -298,14 +301,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
             }
         }
         
-        self.present( socialController, animated: true, completion: nil )
-        
-        // Pop back to Collection OR Table View
-        //if let navigationController = navigationController
-        //{
-        //    navigationController.isNavigationBarHidden = false
-        //    navigationController.popToRootViewController( animated: true )
-        //}
+        present( socialController, animated: true, completion: nil )
     }
     
     // generate a new Memed image
@@ -334,10 +330,10 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     {
         print( "MemeEditorViewController::saveMemedImage()" )
         
-        self.theMeme = MemeImage.init( topText: self.txtTop.text!, bottomText: self.txtBottom.text!, origImage: self.imgView.image!, memedImage: memedImage )
+        theMeme = MemeImage.init( topText: txtTop.text!, bottomText: txtBottom.text!, origImage: imgView.image!, memedImage: memedImage )
         
         print( "Adding Meme to appDelegate memesArray" )
-        ( UIApplication.shared.delegate as! AppDelegate ).memesArray.append( self.theMeme )
+        ( UIApplication.shared.delegate as! AppDelegate ).memesArray.append( theMeme )
     }
 }
 

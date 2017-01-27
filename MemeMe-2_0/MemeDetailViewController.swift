@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class MemeDetailViewController: UIViewController
 {
     @IBOutlet weak var imgView: UIImageView!
@@ -19,14 +18,15 @@ class MemeDetailViewController: UIViewController
     {
         super.viewWillAppear(animated)
         
-        self.tabBarController?.tabBar.isHidden = true
+        tabBarController?.tabBar.isHidden = true
         
-        self.imgView!.image = theMeme.memedImage
+        imgView.image = theMeme.memedImage
+        imgView.contentMode = UIViewContentMode.scaleAspectFit
     }
     
     override func viewWillDisappear(_ animated: Bool)
     {
         super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        tabBarController?.tabBar.isHidden = false
     }
 }
