@@ -22,9 +22,60 @@ class MemeCollectionViewController: UICollectionViewController
         print( "MemeCollectionViewController::viewDidLoad()" )
         
         // Get reference to Memes Array
+        //let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        //memes = appDelegate.memesArray
+        
+        //refreshCollectionFlowLayout()
+    }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear( animated )
+
+        print( "MemeCollectionViewController::viewWillAppear()" )
+        
+        tabBarController?.tabBar.isHidden = false
+        
+        subscribeToDeviceRotationNotifications()
+        
+        // Get reference to Memes Array
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
         
+        refreshCollectionFlowLayout()
+        
+        collectionView?.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool)
+    {
+        super.viewWillDisappear( animated )
+        
+        print( "MemeCollectionViewController::viewWillDisappear()" )
+        
+        unsubscribeFromDeviceRotationNotifications()
+    }
+    
+    // Refresh the flow layout as the view width will change with device rotation and sometimes
+    // it won't look correct - for example collection view first loaded in landscape and then 
+    // cells are too large to fit > 1 on a row in portrait when device is rotated.
+    func subscribeToDeviceRotationNotifications()
+    {
+        NotificationCenter.default.addObserver( self, selector: #selector(deviceWasRotated(_:)), name: .UIDeviceOrientationDidChange, object: nil )
+    }
+    
+    func unsubscribeFromDeviceRotationNotifications()
+    {
+        NotificationCenter.default.removeObserver( self, name: .UIDeviceOrientationDidChange, object: nil )
+    }
+    
+    func deviceWasRotated(_ notification:Notification)
+    {
+        refreshCollectionFlowLayout()
+    }
+    
+    func refreshCollectionFlowLayout()
+    {
         // Setup Collection View flow layout
         let spacing = CGFloat( 4.0 )
         let dimension = ( view.frame.size.width - ( 2 * spacing ) ) / 3.0
@@ -36,24 +87,6 @@ class MemeCollectionViewController: UICollectionViewController
         MemeCollectionFlowLayout.minimumInteritemSpacing = spacing
         MemeCollectionFlowLayout.minimumLineSpacing = spacing
         MemeCollectionFlowLayout.itemSize = CGSize( width: iDimension, height: iDimension )
-    }
-    
-    override func viewWillAppear(_ animated: Bool)
-    {
-        super.viewWillAppear( animated )
-
-        print( "MemeCollectionViewController::viewWillAppear()" )
-        
-        tabBarController?.tabBar.isHidden = false
-        
-        // Noticed sometimes when exiting the Meme Edit view, even though the MEME was saved to the app delegate,
-        // the collection didn't load the new image and refresh, so this is a fix for that
-        
-        // Get reference to Memes Array
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        memes = appDelegate.memesArray
-        
-        collectionView?.reloadData()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int

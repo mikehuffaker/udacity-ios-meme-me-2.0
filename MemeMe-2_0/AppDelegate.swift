@@ -22,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print( "AppDelegate::application()" )
         // Override point for customization after application launch.
         
+        // Start up device rotation notifications that are needed in some of the views.
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        
         return true
     }
 

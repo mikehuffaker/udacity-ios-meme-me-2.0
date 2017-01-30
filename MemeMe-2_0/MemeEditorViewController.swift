@@ -111,17 +111,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         print( "MemeEditorViewController::viewWillDisappear()" )
         
         unsubscribeFromKeyboardNotifications()
-    }
-    
-    // Adjust constaints a bit at runtime to move the Meme text closer to the
-    // edges of the image for landscape
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
-    {
-        super.viewWillTransition(to: size, with: coordinator )
-        
-        print( "MemeEditorViewController::viewWillTransition()" )
-        
-        //refreshTextFieldConstraints()
+        unsubscribeFromDeviceRotationNotifications()
     }
     
     // Initialization code
@@ -149,18 +139,14 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     }
     
     // Methods to adjust contraints for device orientation
-    
-    
     func subscribeToDeviceRotationNotifications()
     {
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         NotificationCenter.default.addObserver( self, selector: #selector(deviceWasRotated(_:)), name: .UIDeviceOrientationDidChange, object: nil )
     }
     
     func unsubscribeFromDeviceRotationNotifications()
     {
         NotificationCenter.default.removeObserver( self, name: .UIDeviceOrientationDidChange, object: nil )
-        UIDevice.current.endGeneratingDeviceOrientationNotifications()
     }
     
     func deviceWasRotated(_ notification:Notification)
