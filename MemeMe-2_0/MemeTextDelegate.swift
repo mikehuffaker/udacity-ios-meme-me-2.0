@@ -1,38 +1,36 @@
 //
-//  TopTxtDelegate.swift
+//  MemeTxtDelegate.swift
 //  MemeMe-2_0
 //
-//  Created by Mike Huffaker on 12/2/16.
+//  Created by Mike Huffaker on 1/30/17.
 //  Copyright © 2016 Mike Huffaker. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class TopTxtDelegate : NSObject, UITextFieldDelegate
+class MemeTxtDelegate : NSObject, UITextFieldDelegate
 {
     func textFieldDidBeginEditing(_ textField: UITextField)
     {
-        print( "TopTxtFieldDelegate::textFieldDidBeginEditing()")
-
+        print( "MemeTxtFieldDelegate::textFieldDidBeginEditing()" )
+        
         // Only if the text field has is initial value, then null
         // out when the user starts editing
-        if textField.text == "TOP"
+        if textField.text == "TOP" || textField.text == "BOTTOM"
         {
             textField.text = ""
         }
         
-        print( "Exiting textFieldDidBeginEditing")
-
         return
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool
     {
-        print( "TopTxtFieldDelegate::textFieldShouldReturn()")
+        print( "MemeTxtFieldDelegate::textFieldShouldReturn()")
         
         textField.resignFirstResponder()
         
-        return true
+        return true;
     }
 }

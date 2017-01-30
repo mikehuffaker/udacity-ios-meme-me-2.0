@@ -18,9 +18,9 @@ class MemeTableViewController: UITableViewController
     
     override func viewDidLoad()
     {
-        print( "MemeTableViewController::viewDidLoad()")
-        
         super.viewDidLoad()
+        
+        print( "MemeTableViewController::viewDidLoad()")
         
         appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memesArray
@@ -28,15 +28,15 @@ class MemeTableViewController: UITableViewController
     
     override func viewWillAppear(_ animated: Bool)
     {
+        super.viewWillAppear(animated)
+
         print( "MemeTableViewController::viewWillAppear()")
         
-        super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
         
         // Noticed sometimes when exiting the Meme Edit view, even though the MEME was saved to the app delegate,
         // the collection didn't load the new image and refresh, so this is a fix for that
         
-        print( "Refreshing Table" )
         memes = appDelegate.memesArray
         tableView.reloadData()
     }
@@ -44,7 +44,6 @@ class MemeTableViewController: UITableViewController
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         print( "MemeTableViewController::tableView::numberOfRowsInSection" )
-        print( "Rows are: ", memes.count )
         
         return memes.count
     }
@@ -80,6 +79,8 @@ class MemeTableViewController: UITableViewController
     
     @IBAction func addButtonPressed(_ sender: Any)
     {
+        print( "MemeTableViewController::addButtonPressed()" )
+        
         let controller = self.storyboard!.instantiateViewController(withIdentifier: "MemeEditorVC") as! MemeEditorViewController
         
         if let navigationController = navigationController

@@ -17,9 +17,9 @@ class MemeCollectionViewController: UICollectionViewController
 
     override func viewDidLoad()
     {
-        print( "MemeCollectionViewController::viewDidLoad()" )
-        
         super.viewDidLoad()
+
+        print( "MemeCollectionViewController::viewDidLoad()" )
         
         // Get reference to Memes Array
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -40,9 +40,10 @@ class MemeCollectionViewController: UICollectionViewController
     
     override func viewWillAppear(_ animated: Bool)
     {
+        super.viewWillAppear( animated )
+
         print( "MemeCollectionViewController::viewWillAppear()" )
         
-        super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = false
         
         // Noticed sometimes when exiting the Meme Edit view, even though the MEME was saved to the app delegate,
@@ -58,7 +59,6 @@ class MemeCollectionViewController: UICollectionViewController
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
         print( "MemeCollectionViewController::numberOfItemsInSection()" )
-        print( "Rows are: ", memes.count )
         
         return memes.count
     }

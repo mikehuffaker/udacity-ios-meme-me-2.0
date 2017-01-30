@@ -26,18 +26,22 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     @IBOutlet weak var btnCamera: UIBarButtonItem!
     @IBOutlet weak var btnAlbum: UIBarButtonItem!
     
+    // Constraints for adjusting at runtime
+    @IBOutlet weak var topTxtConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bottomTxtConstraint: NSLayoutConstraint!
+    
     var memeTxtAttributes:[String:Any] = [:]
 
-    let topTxtDelegate = TopTxtDelegate()
-    let bottomTxtDelegate = BottomTxtDelegate()
+    let topTxtDelegate = MemeTxtDelegate()
+    let bottomTxtDelegate = MemeTxtDelegate()
     
     var theMeme: MemeImage!
     
     override func viewDidLoad()
     {
-        print( "MemeEditorViewController::viewDidLoad()" )
-        
         super.viewDidLoad()
+        
+        print( "MemeEditorViewController::viewDidLoad()" )
         
         if let tabBarController = tabBarController
         {
@@ -75,6 +79,8 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     override func viewDidAppear(_ animated: Bool)
     {
+        super.viewDidAppear( animated )
+        
         print( "MemeEditorViewController::viewDidAppear()" )
         
         // Test if device has camera or not and enable/disable button accordingly
@@ -83,10 +89,15 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
 
     override func viewWillAppear(_ animated: Bool)
     {
+        super.viewWillAppear( animated )
+
         print( "MemeEditorViewController::viewWillAppear()" )
         
-        super.viewWillAppear( animated )
         subscribeToKeyboardNotifications()
+        subscribeToDeviceRotationNotifications()
+        
+        // Adjust constraints based on current orientation portrait/landscape
+        refreshTextFieldConstraints()
         
         // Reset fonts
         refreshTextFieldFont( textField: txtTop )
@@ -95,10 +106,22 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
     
     override func viewWillDisappear(_ animated: Bool)
     {
+        super.viewWillDisappear( animated )
+
         print( "MemeEditorViewController::viewWillDisappear()" )
         
-        super.viewWillDisappear( animated )
         unsubscribeFromKeyboardNotifications()
+    }
+    
+    // Adjust constaints a bit at runtime to move the Meme text closer to the
+    // edges of the image for landscape
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
+    {
+        super.viewWillTransition(to: size, with: coordinator )
+        
+        print( "MemeEditorViewController::viewWillTransition()" )
+        
+        //refreshTextFieldConstraints()
     }
     
     // Initialization code
@@ -111,6 +134,7 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         textField.defaultTextAttributes = memeTxtAttributes
         textField.textAlignment = NSTextAlignment.center
         textField.text = initialText
+        textField.borderStyle = UITextBorderStyle.none
         textField.delegate = delegate
     }
     
@@ -121,8 +145,47 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         
         textField.defaultTextAttributes = memeTxtAttributes
         textField.textAlignment = NSTextAlignment.center
+        textField.borderStyle = UITextBorderStyle.none
     }
     
+    // Methods to adjust contraints for device orientation
+    
+    
+    func subscribeToDeviceRotationNotifications()
+    {
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver( self, selector: #selector(deviceWasRotated(_:)), name: .UIDeviceOrientationDidChange, object: nil )
+    }
+    
+    func unsubscribeFromDeviceRotationNotifications()
+    {
+        NotificationCenter.default.removeObserver( self, name: .UIDeviceOrientationDidChange, object: nil )
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+    }
+    
+    func deviceWasRotated(_ notification:Notification)
+    {
+        refreshTextFieldConstraints()
+    }
+    
+    func refreshTextFieldConstraints()
+    {
+    
+        let orientation = UIDevice.current.orientation
+    
+        switch orientation
+        {
+        case .landscapeRight, .landscapeLeft:
+            print ( "LandscapeRight" )
+            topTxtConstraint.constant = 15
+            bottomTxtConstraint.constant = 15
+        default:
+            print ( "Default" )
+            topTxtConstraint.constant = 35
+            bottomTxtConstraint.constant = 35
+        }
+    }
+
     // Keyboard shifting code
     func subscribeToKeyboardNotifications()
     {
@@ -312,8 +375,8 @@ class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegat
         tbSocial.isHidden = true
         tbImage.isHidden = true
         
-        UIGraphicsBeginImageContext( self.view.frame.size )
-        view.drawHierarchy( in: self.view.frame, afterScreenUpdates: true )
+        UIGraphicsBeginImageContext( view.frame.size )
+        view.drawHierarchy( in: view.frame, afterScreenUpdates: true )
         let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
 

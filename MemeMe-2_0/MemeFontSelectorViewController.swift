@@ -18,9 +18,9 @@ class MemeFontSelectorViewController: UIViewController, UIPickerViewDelegate, UI
     
     override func viewDidLoad()
     {
-        print( "MemeFontSelectorViewController::viewDidLoad()" )
-        
         super.viewDidLoad()
+
+        print( "MemeFontSelectorViewController::viewDidLoad()" )
         
         // Redisplay the navigation controller so the user can go back to the Editor view.
         if let navigationController = navigationController
@@ -56,6 +56,8 @@ class MemeFontSelectorViewController: UIViewController, UIPickerViewDelegate, UI
     // font name used in the Meme Editor and also pre-select the picker
     override func viewWillAppear(_ animated: Bool)
     {
+        super.viewWillAppear( animated )
+        
         print( "MemeFontSelectorViewController::viewWillAppear()" )
         
         var currentFont: UIFont
@@ -76,9 +78,9 @@ class MemeFontSelectorViewController: UIViewController, UIPickerViewDelegate, UI
     // value selected in the picker and re-hide the navigation bar
     override func viewWillDisappear(_ animated: Bool)
     {
-        print( "MemeFontSelectorViewController::viewWillDisappear()" )
-        
         super.viewWillDisappear( animated )
+
+        print( "MemeFontSelectorViewController::viewWillDisappear()" )
         
         if let navigationController = navigationController
         {
