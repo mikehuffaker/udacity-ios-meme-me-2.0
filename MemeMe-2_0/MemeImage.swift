@@ -17,4 +17,3 @@ struct MemeImage
     var origImage: UIImage
     var memedImage: UIImage
 }
-

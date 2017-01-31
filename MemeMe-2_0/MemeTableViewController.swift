@@ -10,7 +10,6 @@ import UIKit
 
 class MemeTableViewController: UITableViewController
 {
-    
     @IBOutlet var memeTable: UITableView!
     
     var appDelegate: AppDelegate!

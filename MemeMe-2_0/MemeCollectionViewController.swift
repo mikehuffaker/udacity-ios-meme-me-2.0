@@ -10,10 +10,13 @@ import UIKit
 
 class MemeCollectionViewController: UICollectionViewController
 {
-    
     @IBOutlet weak var MemeCollectionFlowLayout: UICollectionViewFlowLayout!
     
     var memes: [MemeImage]!
+    
+    var portraitDimension: Int!
+    var landscapeDimension: Int!
+    var heightDimension: Int!
 
     override func viewDidLoad()
     {
@@ -21,11 +24,34 @@ class MemeCollectionViewController: UICollectionViewController
 
         print( "MemeCollectionViewController::viewDidLoad()" )
         
-        // Get reference to Memes Array
-        //let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        //memes = appDelegate.memesArray
+        // Setup Collection View flow layout
+        let spacing = CGFloat( 4.0 )
+        let dim1 = ( view.frame.size.width - ( 2 * spacing ) ) / 3.0
+        let dim2 = ( view.frame.size.height - ( 2 * spacing ) ) / 3.0
+
+        if dim1 < dim2
+        {
+            portraitDimension = Int(dim1)
+            landscapeDimension = Int(dim2)
+        }
+        else
+        {
+            portraitDimension = Int(dim2)
+            landscapeDimension = Int(dim1)
+        }
         
-        //refreshCollectionFlowLayout()
+        // Set to current size of cell, plus spacing.  In a future version
+        // I might try to calculate this at runtime from the storyboard
+        // collection cell height and spacing.
+        heightDimension = 122 + Int(spacing)
+        
+        print( "Dimensions for collection portrait: ", portraitDimension )
+        print( "Dimensions for collection portrait: ", landscapeDimension )
+        
+        // Set spacing once, dimensions will be set dynamically based on device
+        // orientation later.
+        MemeCollectionFlowLayout.minimumInteritemSpacing = spacing
+        MemeCollectionFlowLayout.minimumLineSpacing = spacing
     }
     
     override func viewWillAppear(_ animated: Bool)
@@ -76,17 +102,17 @@ class MemeCollectionViewController: UICollectionViewController
     
     func refreshCollectionFlowLayout()
     {
-        // Setup Collection View flow layout
-        let spacing = CGFloat( 4.0 )
-        let dimension = ( view.frame.size.width - ( 2 * spacing ) ) / 3.0
-        print( "Dimension for collection: ", dimension )
+        let orientation = UIDevice.current.orientation
         
-        let iDimension = Int(dimension)
-        print( "Dimension for collection rounded: ", iDimension )
-        
-        MemeCollectionFlowLayout.minimumInteritemSpacing = spacing
-        MemeCollectionFlowLayout.minimumLineSpacing = spacing
-        MemeCollectionFlowLayout.itemSize = CGSize( width: iDimension, height: iDimension )
+        switch orientation
+        {
+        case .landscapeRight, .landscapeLeft:
+            print ( "Landscape" )
+            MemeCollectionFlowLayout.itemSize = CGSize( width: landscapeDimension, height: heightDimension )
+        default:
+            print ( "Default" )
+            MemeCollectionFlowLayout.itemSize = CGSize( width: portraitDimension, height: heightDimension )
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
